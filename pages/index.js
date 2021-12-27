@@ -17,7 +17,6 @@ const supportedTokens = [
     name: 'GIVE',
     symbol: 'GIVE',
     decimals: 18,
-    address: '0x9a77eE1DACCc13674B047F967F863B5C8A9f6807',
   }
 ]
 
@@ -53,34 +52,15 @@ export default function Index() {
       // Check if User is already connected by retrieving the accounts
       web3.eth.getAccounts()
         .then(async (addr) => {
-
-          if (addr.length > 0) {
-            // Set User account into state
-            setUser(addr[0]);
-            // Set User balance into state
-            setBalance(await web3.eth.getBalance(addr[0]));
-
-            // Get token balances
-            let tokenAddresses = [];
-            supportedTokens.forEach(token => {
-              tokenAddresses.push(token.address);
-            });
-
-            // Get token balances
-            let tokenBalances = [];
-            tokenAddresses.forEach(async (tokenAddress) => {
-              tokenBalances.push(await web3.eth.getBalance(tokenAddress));
-            });
-
-            // Set token balances into state
-            setTokenAddresses(tokenAddresses);
-            setHypeBalance(tokenBalances[0]);
-            setGiveBalance(tokenBalances[1]);
-
-            setLoading(false);
-          } else {
-            setLoading(false);
-          }
+          // Set User account into state
+          setUser(addr[0]);
+          // Set User balance into state
+          // setBalance(await web3.eth.getBalance(addr[0]));
+          // Set Hype balance into state
+          // setHypeBalance(await web3.eth.getTokenBalance(addr[0], '0x9a77eE1DACCc13674B047F967F863B5C8A9f6807'));
+          // Set Give balance into state
+          // setGiveBalance(await web3.eth.getBalance(addr[0]));
+          setLoading(false);
         });
     };
     checkConnection();
@@ -111,7 +91,7 @@ export default function Index() {
                 <h1>When you're ready.</h1>
                 <h2>{user}</h2>
                 <h3>{balance}</h3> 
-                <button onClick={redPill}>Red Pill</button>
+                <Link href={'/gatekeeper'}><a href="">Enter Metaverse</a></Link>
               </>
             }
 
