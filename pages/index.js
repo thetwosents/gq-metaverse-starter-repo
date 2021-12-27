@@ -6,6 +6,21 @@ import MatrixBG from "../components/matrix.js";
 import getWeb3 from '../utils/getWeb3';
 import getBalance from '../utils/getBalance';
 
+const supportedTokens = [
+  {
+    name: 'HYPE',
+    symbol: 'HYPE',
+    decimals: 18,
+    address: '0x9a77eE1DACCc13674B047F967F863B5C8A9f6807',
+  },
+  {
+    name: 'GIVE',
+    symbol: 'GIVE',
+    decimals: 18,
+    address: '0x9a77eE1DACCc13674B047F967F863B5C8A9f6807',
+  }
+]
+
 export default function Index() {
   const [loading, setLoading] = useState(true);
   const [selection, setSelection] = useState(false);
@@ -13,6 +28,7 @@ export default function Index() {
   const [balance, setBalance] = useState(false);
   const [hypeBalance, setHypeBalance] = useState(false);
   const [giveBalance, setGiveBalance] = useState(false);
+  const [tokenAddresses, setTokenAddresses] = useState([]);
   const redPill = () => {
     getWeb3(true)
       .then((result) => {
@@ -37,11 +53,34 @@ export default function Index() {
       // Check if User is already connected by retrieving the accounts
       web3.eth.getAccounts()
         .then(async (addr) => {
-          // Set User account into state
-          setUser(addr[0]);
-          // Set User balance into state
-          setBalance(await web3.eth.getBalance(addr[0]));
-          setLoading(false);
+
+          if (addr.length > 0) {
+            // Set User account into state
+            setUser(addr[0]);
+            // Set User balance into state
+            setBalance(await web3.eth.getBalance(addr[0]));
+
+            // Get token balances
+            let tokenAddresses = [];
+            supportedTokens.forEach(token => {
+              tokenAddresses.push(token.address);
+            });
+
+            // Get token balances
+            let tokenBalances = [];
+            tokenAddresses.forEach(async (tokenAddress) => {
+              tokenBalances.push(await web3.eth.getBalance(tokenAddress));
+            });
+
+            // Set token balances into state
+            setTokenAddresses(tokenAddresses);
+            setHypeBalance(tokenBalances[0]);
+            setGiveBalance(tokenBalances[1]);
+
+            setLoading(false);
+          } else {
+            setLoading(false);
+          }
         });
     };
     checkConnection();
