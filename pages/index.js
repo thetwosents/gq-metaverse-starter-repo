@@ -106,7 +106,7 @@ export default function Index() {
                 onClick={redPill}
               > Red pill </div>
               <br />
-              <div className='button' onClick={() => setSelection(false)}> Blue pill </div>
+              <div className='button' onClick={() => setSelection(false)}> Learn More </div>
             </div>
           </>
             }
